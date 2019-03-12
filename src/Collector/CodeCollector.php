@@ -8,7 +8,7 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use SilverStripe\TextCollector\CollectorInterface;
 use SilverStripe\TextCollector\TextRepository;
-use SilverStripe\TextCollector\Visitor\i18nTagCollectorVisitor;
+use SilverStripe\TextCollector\Visitor\TextCollectorVisitor;
 
 /**
  * Collects translations from PHP code.
@@ -34,7 +34,7 @@ class CodeCollector implements CollectorInterface
         $collectedText = new TextRepository();
         $nameResolver = new NameResolver();
         $traverser->addVisitor($nameResolver);
-        $traverser->addVisitor(new i18nTagCollectorVisitor($collectedText, $nameResolver->getNameContext()));
+        $traverser->addVisitor(new TextCollectorVisitor($collectedText, $nameResolver->getNameContext()));
 
         $ast = $parser->parse($contents);
         $traverser->traverse($ast);

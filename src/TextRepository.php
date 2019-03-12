@@ -2,6 +2,9 @@
 
 namespace SilverStripe\TextCollector;
 
+/**
+ * Holds collected text entities in a key value store
+ */
 class TextRepository
 {
     protected $text = [];

@@ -12,7 +12,7 @@ use SilverStripe\TextCollector\CollectorInterface;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
-class i18nTagCollectorVisitor extends NodeVisitorAbstract
+class TextCollectorVisitor extends NodeVisitorAbstract
 {
     /**
      * @var TextRepository
@@ -35,7 +35,8 @@ class i18nTagCollectorVisitor extends NodeVisitorAbstract
         $this->nameContext = $nameContext;
     }
 
-    public function enterNode(Node $node) {
+    public function enterNode(Node $node)
+    {
         // Find _t() function calls
         if ($node instanceof FuncCall
             && (string) $node->name === CollectorInterface::FUNCTION_NAME
