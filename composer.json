@@ -1,6 +1,6 @@
 {
     "name": "silverstripe/textcollector",
-    "type": "silverstripe-vendormodule"
+    "type": "silverstripe-vendormodule",
     "require": {
         "silverstripe/framework": "^4.0"
     },
