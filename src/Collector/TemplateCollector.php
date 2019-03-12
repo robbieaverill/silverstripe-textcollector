@@ -8,6 +8,5 @@ class TemplateCollector implements CollectorInterface
 {
     public function collect()
     {
-
     }
 }

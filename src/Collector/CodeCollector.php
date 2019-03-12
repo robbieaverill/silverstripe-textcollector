@@ -8,6 +8,5 @@ class CodeCollector implements CollectorInterface
 {
     public function collect()
     {
-
     }
 }
