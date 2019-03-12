@@ -7,6 +7,9 @@ use PhpParser\Node\Scalar\String_;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
+/**
+ * Handles keys like `'FooBar.VALUE'` or `'SilverStripe\\Model\\FooBar.Model'`
+ */
 class StringHandler implements NodeHandlerInterface
 {
     /**

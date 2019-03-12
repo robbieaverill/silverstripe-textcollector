@@ -7,6 +7,9 @@ use PhpParser\Node\Expr;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
+/**
+ * Handles keys like `SomeClass::class . '.MY_TRANSLATION'`
+ */
 class ClassShortNameHandler implements NodeHandlerInterface
 {
     /**
