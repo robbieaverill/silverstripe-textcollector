@@ -1,0 +1,29 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\ORM\DataObject;
+
+class BasicClass extends DataObject
+{
+    public function getClassConstant()
+    {
+        return _t(__CLASS__ . '.TITLE', '__CLASS__ title');
+    }
+
+    public function getExplicitFQCN()
+    {
+        return _t('SilverStripe\\TextCollector\\Tests\\BasicClass.TITLE', 'Explicit FQCN title');
+    }
+
+    public function getSiteTreeClass()
+    {
+        return _t(SiteTree::class . '.TITLE', 'SiteTree::class title');
+    }
+
+    public function getSelfConstant()
+    {
+        return _t(self::class . '.TITLE', 'self::class title');
+    }
+}

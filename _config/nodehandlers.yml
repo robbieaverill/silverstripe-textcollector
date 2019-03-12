@@ -1,0 +1,7 @@
+---
+Name: nodehandlers
+---
+SilverStripe\TextCollector\Visitor\i18nTagCollectorVisitor:
+  handlers:
+    - SilverStripe\TextCollector\NodeHandler\StringHandler
+    - SilverStripe\TextCollector\NodeHandler\ClassShortNameHandler
