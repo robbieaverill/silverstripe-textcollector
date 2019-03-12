@@ -1,0 +1,8 @@
+---
+Name: textcollectorconfig
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\TextCollector\CollectorInterface.code:
+    class: SilverStripe\TextCollector\Collector\CodeCollector
+  SilverStripe\TextCollector\CollectorInterface.template:
+    class: SilverStripe\TextCollector\Collector\TemplateCollector
