@@ -51,6 +51,6 @@ class ClassShortNameHandler implements NodeHandlerInterface
             // Handle SomeClass::class constants
             $className = implode('\\', $this->nameContext->getResolvedClassName($left->class)->parts);
         }
-        $this->repository->add($className . $keyNode->right->value, $valueNode->value);
+        $this->repository->addString($className . $keyNode->right->value, $valueNode->value);
     }
 }

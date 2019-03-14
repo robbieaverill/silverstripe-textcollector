@@ -58,7 +58,12 @@ class TextCollectorVisitor extends NodeVisitorAbstract
             if (!$handler->canHandle($keyNode->value, $valueNode->value)) {
                 continue;
             }
-            return $handler->handle($keyNode->value, $valueNode->value, $this->context);
+            $handler->handle($keyNode->value, $valueNode->value, $this->context);
+            break;
+        }
+
+        if (isset($node->args[2])) {
+            $this->augmentWithComments($keyNode->value, $node->args[2]->value);
         }
     }
 
@@ -67,7 +72,7 @@ class TextCollectorVisitor extends NodeVisitorAbstract
      *
      * @return NodeHandlerInterface[]
      */
-    public function getHandlers()
+    public function getHandlers(): array
     {
         if (!$this->handlers) {
             $handlerClasses = Config::inst()->get(__CLASS__, 'handlers');
@@ -80,5 +85,30 @@ class TextCollectorVisitor extends NodeVisitorAbstract
             }
         }
         return $this->handlers;
+    }
+
+    /**
+     * If there's a third argument and it's a string, we treat it as a comment. We can augment the existing collected
+     * text with the comment by replacing it, rather than expecting all Handlers to handler both scenarios
+     *
+     * @param Node\Expr $keyNode
+     * @param Node\Expr $extra
+     * @return boolean Whether an action was performed
+     */
+    protected function augmentWithComments(Node\Expr $keyNode, Node\Expr $extra): bool
+    {
+        /** @var Node\Scalar\String_ $keyNode */
+        if (!$keyNode instanceof Node\Scalar\String_
+            || !$extra instanceof Node\Scalar\String_
+            || !$this->repository->has($keyNode->value)
+        ) {
+            return false;
+        }
+
+        $this->repository->addArray($keyNode->value, [
+            'default' => $this->repository->get($keyNode->value),
+            'comment' => $extra->value,
+        ]);
+        return true;
     }
 }

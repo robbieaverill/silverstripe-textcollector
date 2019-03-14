@@ -43,6 +43,6 @@ class MagicClassConstantHandler implements NodeHandlerInterface
     {
         /** @var Expr\BinaryOp\Concat $keyNode */
         /** @var String_ $valueNode */
-        $this->repository->add($context['currentClass'] . $keyNode->right->value, $valueNode->value);
+        $this->repository->addString($context['currentClass'] . $keyNode->right->value, $valueNode->value);
     }
 }

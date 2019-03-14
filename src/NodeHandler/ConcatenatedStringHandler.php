@@ -59,6 +59,6 @@ class ConcatenatedStringHandler implements NodeHandlerInterface
         // Flip the array direction
         $valueParts = array_reverse($valueParts);
 
-        $this->repository->add($keyNode->value, implode($valueParts));
+        $this->repository->addString($keyNode->value, implode($valueParts));
     }
 }

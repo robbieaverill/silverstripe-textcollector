@@ -34,6 +34,6 @@ class StringHandler implements NodeHandlerInterface
     {
         /** @var String_ $keyNode */
         /** @var String_ $valueNode */
-        $this->repository->add($keyNode->value, $valueNode->value);
+        $this->repository->addString($keyNode->value, $valueNode->value);
     }
 }

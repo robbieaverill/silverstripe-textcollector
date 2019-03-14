@@ -39,6 +39,6 @@ class CodeCollector implements CollectorInterface
         $ast = $parser->parse($contents);
         $traverser->traverse($ast);
 
-        return $collectedText->get();
+        return $collectedText->getAll();
     }
 }
