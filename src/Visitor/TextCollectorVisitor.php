@@ -9,6 +9,7 @@ use PhpParser\NodeVisitorAbstract;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\TextCollector\CollectorInterface;
+use SilverStripe\TextCollector\Exception\MissingDefaultValueException;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
@@ -40,6 +41,11 @@ class TextCollectorVisitor extends NodeVisitorAbstract
         $this->nameContext = $nameContext;
     }
 
+    /**
+     * @param Node $node
+     * @return int|Node|null
+     * @throws MissingDefaultValueException
+     */
     public function enterNode(Node $node)
     {
         // Track the current class and namespace for use in self class references
@@ -53,7 +59,13 @@ class TextCollectorVisitor extends NodeVisitorAbstract
         }
 
         // Note: expected _t() argument structure
+        if (count($node->args) === 1) {
+            throw new MissingDefaultValueException(
+                $node->args[0]->value->value . ' missing default translation value.'
+            );
+        }
         list($keyNode, $valueNode) = $node->args;
+
         foreach ($this->getHandlers() as $handler) {
             if (!$handler->canHandle($keyNode->value, $valueNode->value)) {
                 continue;

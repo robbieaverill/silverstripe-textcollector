@@ -73,6 +73,15 @@ class CodeCollectorTest extends SapphireTest
     }
 
     /**
+     * @expectedException \SilverStripe\TextCollector\Exception\MissingDefaultValueException
+     * @expectedExceptionMessage Test.NO_VALUE missing default translation value
+     */
+    public function testTranslationsWithoutDefaultValues()
+    {
+        $this->collectFromFixture('MissingValues');
+    }
+
+    /**
      * Loads a fixtured PHP template file from the fixtures folder and returns the collected contents of it
      *
      * @param string $fixture
