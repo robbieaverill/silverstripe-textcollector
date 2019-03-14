@@ -12,7 +12,7 @@ use SilverStripe\TextCollector\TextRepository;
 /**
  * Handles keys with magic class constant: `__CLASS__ . '.MY_TRANSLATION'`
  */
-class MagicClassConstantHandler  implements NodeHandlerInterface
+class MagicClassConstantHandler implements NodeHandlerInterface
 {
     /**
      * @var TextRepository

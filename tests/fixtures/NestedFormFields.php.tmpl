@@ -16,7 +16,7 @@ class NestedFormFields extends DataObject
         $fields->addFieldsToTab('Root.Main', [
             new TextField('FieldA', _t(__CLASS__ . '.FieldA', 'Field A')),
             new CompositeField(
-                new DropdownField('DropdownField', _t(__CLASS__ . '.DropdownField', 'Dropdown Field')),
+                new DropdownField('DropdownField', _t(__CLASS__ . '.Drop', 'Dropdown Field')),
                 new CheckboxField('CheckboxField', _t('NestedFormFields.CheckboxField', 'Checkbox Field')),
             ),
         ]);
