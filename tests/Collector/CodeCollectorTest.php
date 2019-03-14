@@ -39,4 +39,29 @@ class CodeCollectorTest extends SapphireTest
             $result['SilverStripe\\TextCollector\\Tests\\BasicClass.SELF_TITLE']
         );
     }
+
+    public function testNestedFormFieldCollection()
+    {
+        $fixture = FixtureLoader::load('NestedFormFields');
+        $collector = new CodeCollector();
+        $result = $collector->collect($fixture);
+
+        $this->assertArrayHasKey('SilverStripe\\TextCollector\\Tests\\NestedFormFields.FieldA', $result);
+        $this->assertSame(
+            'Field A',
+            $result['SilverStripe\\TextCollector\\Tests\\NestedFormFields.FieldA']
+        );
+
+        $this->assertArrayHasKey('SilverStripe\\TextCollector\\Tests\\NestedFormFields.DropdownField', $result);
+        $this->assertSame(
+            'Dropdown Field',
+            $result['SilverStripe\\TextCollector\\Tests\\NestedFormFields.DropdownField']
+        );
+
+        $this->assertArrayHasKey('NestedFormFields.CheckboxField', $result);
+        $this->assertSame(
+            'Checkbox Field',
+            $result['NestedFormFields.CheckboxField']
+        );
+    }
 }

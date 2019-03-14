@@ -1,0 +1,25 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\CompositeField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\DataObject;
+
+class NestedFormFields extends DataObject
+{
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+        $fields->addFieldsToTab('Root.Main', [
+            new TextField('FieldA', _t(__CLASS__ . '.FieldA', 'Field A')),
+            new CompositeField(
+                new DropdownField('DropdownField', _t(__CLASS__ . '.DropdownField', 'Dropdown Field')),
+                new CheckboxField('CheckboxField', _t('NestedFormFields.CheckboxField', 'Checkbox Field')),
+            ),
+        ]);
+        return $fields;
+    }
+}
