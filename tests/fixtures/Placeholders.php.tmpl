@@ -1,0 +1,15 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+use SilverStripe\ORM\DataObject;
+
+class Placeholders extends DataObject
+{
+    public function getLunch()
+    {
+        return _t(__CLASS__ . '.LUNCH_AMOUNT', 'Get {amount} items for lunch', [
+            'amount' => 25
+        ]);
+    }
+}
