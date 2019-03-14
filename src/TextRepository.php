@@ -9,7 +9,7 @@ class TextRepository
 {
     protected $text = [];
 
-    public function add(string $key, string $value): self
+    public function add(string $key, ?string $value): self
     {
         $this->text[$key] = $value;
         return $this;
