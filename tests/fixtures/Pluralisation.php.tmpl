@@ -1,0 +1,13 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+class Pluralisation
+{
+    public function getTranslations()
+    {
+        return [
+            _t('i18nTestModule.INJECTIONS9', 'An item|{count} items', ['count' => 4], 'Test Pluralisation'),
+        ];
+    }
+}

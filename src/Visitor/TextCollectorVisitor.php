@@ -62,10 +62,8 @@ class TextCollectorVisitor extends NodeVisitorAbstract
             break;
         }
 
-        // Example call signature: _t('Foo.BAR', 'Bar', 'Comment here')
-        if (isset($node->args[2])) {
-            $this->augmentWithComments($keyNode->value, $node->args[2]->value);
-        }
+        $this->augmentWithComments($keyNode->value, $node->args);
+        $this->handlePlurals();
     }
 
     /**
@@ -93,23 +91,59 @@ class TextCollectorVisitor extends NodeVisitorAbstract
      * text with the comment by replacing it, rather than expecting all Handlers to handle both scenarios
      *
      * @param Node\Expr $keyNode
-     * @param Node\Expr $extra
+     * @param Node[] $args
      * @return boolean Whether an action was performed
      */
-    protected function augmentWithComments(Node\Expr $keyNode, Node\Expr $extra): bool
+    protected function augmentWithComments(Node\Expr $keyNode, array $args): bool
     {
         /** @var Node\Scalar\String_ $keyNode */
-        if (!$keyNode instanceof Node\Scalar\String_
-            || !$extra instanceof Node\Scalar\String_
-            || !$this->repository->has($keyNode->value)
-        ) {
+        if (!$keyNode instanceof Node\Scalar\String_ || !$this->repository->has($keyNode->value)) {
+            return false;
+        }
+
+        // Look for a string node. If one is found, use it.
+        $extraArgs = array_slice($args, 2);
+        $comment = false;
+        foreach ($extraArgs as $extraArg) {
+            if ($extraArg->value instanceof Node\Scalar\String_) {
+                $comment = $extraArg->value;
+                break;
+            }
+        }
+
+        // Skip if no comment was found
+        if (!$comment) {
             return false;
         }
 
         $this->repository->addArray($keyNode->value, [
             'default' => $this->repository->get($keyNode->value),
-            'comment' => $extra->value,
+            'comment' => $comment->value,
         ]);
         return true;
+    }
+
+    /**
+     * Processes all items in the text repository and looks for translations that should be treated as pluralisations,
+     * e.g. `An item|{count} items`, and breaks them up into structured data.
+     */
+    protected function handlePlurals(): void
+    {
+        foreach ($this->repository->getAll() as $key => $value) {
+            $checkValue = is_string($value) ? $value : $value['default'];
+            // Look for a pipe delimiter, indicating pluralisation
+            if (strpos($checkValue, '|') === false) {
+                continue;
+            }
+
+            list($single, $plural) = explode('|', $checkValue);
+            $originalArray = is_array($value) ? $value : [];
+            unset($originalArray['default']);
+
+            $this->repository->addArray($key, [
+                'one' => $single,
+                'other' => $plural,
+            ] + $originalArray);
+        }
     }
 }

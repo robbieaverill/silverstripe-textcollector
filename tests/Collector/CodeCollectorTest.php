@@ -51,8 +51,25 @@ class CodeCollectorTest extends SapphireTest
     {
         $result = $this->collectFromFixture('WithComments');
 
-        $this->assertSame('An example string', $result['Test.EXAMPLE']['default']);
-        $this->assertSame('Comment describing the example string', $result['Test.EXAMPLE']['comment']);
+        $this->assertSame('An example string', $result['Test.EXAMPLE1']['default']);
+        $this->assertSame('Comment describing the example string', $result['Test.EXAMPLE1']['comment']);
+
+        $this->assertSame('An example string', $result['Test.EXAMPLE2']['default']);
+        $this->assertSame('Comment', $result['Test.EXAMPLE2']['comment']);
+
+        $this->assertSame('An example string', $result['Test.EXAMPLE3']['default']);
+        $this->assertSame('Comment', $result['Test.EXAMPLE3']['comment']);
+    }
+
+    public function testPluralisation()
+    {
+        $result = $this->collectFromFixture('Pluralisation');
+
+        $this->assertSame([
+            'one' => 'An item',
+            'other' => '{count} items',
+            'comment' => 'Test Pluralisation',
+        ], $result['i18nTestModule.INJECTIONS9']);
     }
 
     /**

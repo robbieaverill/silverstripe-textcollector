@@ -2,12 +2,14 @@
 
 namespace SilverStripe\TextCollector\Tests;
 
-use SilverStripe\ORM\DataObject;
-
-class WithComments extends DataObject
+class WithComments
 {
-    public function getBackgroundInfo()
+    public function getTranslations()
     {
-        return _t('Test.EXAMPLE', 'An example string', 'Comment describing the example string');
+        return [
+            _t('Test.EXAMPLE1', 'An example string', 'Comment describing the example string'),
+            _t('Test.EXAMPLE2', 'An example string', 'Comment', ['something' => 'irrelevant']),
+            _t('Test.EXAMPLE3', 'An example string', ['something' => 'irrelevant'], 'Comment'),
+        ];
     }
 }
