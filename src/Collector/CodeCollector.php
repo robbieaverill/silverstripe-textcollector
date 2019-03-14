@@ -38,9 +38,6 @@ class CodeCollector implements CollectorInterface
 
         $ast = $parser->parse($contents);
         $traverser->traverse($ast);
-//        echo (new NodeDumper())->dump($ast), PHP_EOL;
-//        print_r($ast);
-//        var_dump($collectedText->get());
 
         return $collectedText->get();
     }

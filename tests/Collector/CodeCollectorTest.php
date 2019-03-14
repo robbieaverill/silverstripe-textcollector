@@ -11,9 +11,7 @@ class CodeCollectorTest extends SapphireTest
 {
     public function testBasicClassCollection()
     {
-        $fixture = FixtureLoader::load('BasicClass');
-        $collector = new CodeCollector();
-        $result = $collector->collect($fixture);
+        $result = $this->collectFromFixture('BasicClass');
 
         $this->assertSame('Explicit FQCN title', $result['SilverStripe\\TextCollector\\Tests\\BasicClass.TITLE']);
         $this->assertSame('SiteTree::class title', $result[SiteTree::class . '.TITLE']);
@@ -23,9 +21,7 @@ class CodeCollectorTest extends SapphireTest
 
     public function testNestedFormFieldCollection()
     {
-        $fixture = FixtureLoader::load('NestedFormFields');
-        $collector = new CodeCollector();
-        $result = $collector->collect($fixture);
+        $result = $this->collectFromFixture('NestedFormFields');
 
         $this->assertSame('Field A', $result['SilverStripe\\TextCollector\\Tests\\NestedFormFields.FieldA']);
         $this->assertSame('Dropdown Field', $result['SilverStripe\\TextCollector\\Tests\\NestedFormFields.Drop']);
@@ -34,9 +30,7 @@ class CodeCollectorTest extends SapphireTest
 
     public function testGetPlaceholders()
     {
-        $fixture = FixtureLoader::load('Placeholders');
-        $collector = new CodeCollector();
-        $result = $collector->collect($fixture);
+        $result = $this->collectFromFixture('Placeholders');
 
         $this->assertSame(
             'Get {amount} items for lunch',
@@ -46,12 +40,31 @@ class CodeCollectorTest extends SapphireTest
 
     public function testConcatenationInEntityValues()
     {
-        $fixture = FixtureLoader::load('ConcatenationInEntityValues');
-        $collector = new CodeCollector();
-        $result = $collector->collect($fixture);
+        $result = $this->collectFromFixture('ConcatenationInEntityValues');
 
         $this->assertSame('Line 1 and Line \'2\' and Line "3"', $result['Test.CONCATENATED']);
         $this->assertSame('Line 1 Line 2 Line 3 Line 4 Line 5 Line 6', $result['Test.MOARCONCATENATED']);
         $this->assertSame('I would like 3 lunches please', $result['Test.INTCONCAT']);
+    }
+
+    public function testEntityWithComment()
+    {
+        $result = $this->collectFromFixture('WithComments');
+
+        $this->assertSame('An example string', $result['Test.EXAMPLE']['default']);
+        $this->assertSame('Comment describing the example string', $result['Test.EXAMPLE']['comment']);
+    }
+
+    /**
+     * Loads a fixtured PHP template file from the fixtures folder and returns the collected contents of it
+     *
+     * @param string $fixture
+     * @return array
+     */
+    private function collectFromFixture(string $fixture): array
+    {
+        $fixture = FixtureLoader::load($fixture);
+        $collector = new CodeCollector();
+        return $collector->collect($fixture);
     }
 }

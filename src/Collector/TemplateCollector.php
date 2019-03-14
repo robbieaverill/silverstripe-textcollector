@@ -4,6 +4,9 @@ namespace SilverStripe\TextCollector\Collector;
 
 use SilverStripe\TextCollector\CollectorInterface;
 
+/**
+ * @todo build this.
+ */
 class TemplateCollector implements CollectorInterface
 {
     public function collect(string $contents): array

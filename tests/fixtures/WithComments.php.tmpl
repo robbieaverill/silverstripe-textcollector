@@ -1,0 +1,13 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+use SilverStripe\ORM\DataObject;
+
+class WithComments extends DataObject
+{
+    public function getBackgroundInfo()
+    {
+        return _t('Test.EXAMPLE', 'An example string', 'Comment describing the example string');
+    }
+}
