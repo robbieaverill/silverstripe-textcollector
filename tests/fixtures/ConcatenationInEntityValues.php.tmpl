@@ -1,0 +1,32 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+use SilverStripe\ORM\DataObject;
+
+class ConcatenationInEntityValues extends DataObject
+{
+    public function getThreeConcats()
+    {
+        return _t(
+            'Test.CONCATENATED',
+            'Line 1 and '
+            . 'Line \'2\' and '
+            . 'Line "3"',
+            'Comment'
+        );
+    }
+
+    public function getSixConcats()
+    {
+        return _t(
+            'Test.MOARCONCATENATED',
+            'Line 1 '
+            . 'Line 2 '
+            . 'Line 3 '
+            . 'Line 4 '
+            . 'Line 5 '
+            . 'Line 6'
+        );
+    }
+}

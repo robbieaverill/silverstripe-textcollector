@@ -27,7 +27,7 @@ class StringHandler implements NodeHandlerInterface
 
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
-        return $keyNode instanceof String_;
+        return $keyNode instanceof String_ && $valueNode instanceof String_;
     }
 
     public function handle(Expr $keyNode, Expr $valueNode, array $context)
