@@ -36,7 +36,8 @@ class MagicClassConstantHandler implements NodeHandlerInterface
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
         return $keyNode instanceof Expr\BinaryOp\Concat
-            && $keyNode->left instanceof MagicConst\Class_;
+            && $keyNode->left instanceof MagicConst\Class_
+            && $valueNode instanceof String_;
     }
 
     public function handle(Expr $keyNode, Expr $valueNode, array $context)

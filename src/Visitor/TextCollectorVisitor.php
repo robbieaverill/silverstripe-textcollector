@@ -54,7 +54,10 @@ class TextCollectorVisitor extends NodeVisitorAbstract
         }
 
         // Find _t() function calls
-        if (!$node instanceof FuncCall || (string) $node->name !== CollectorInterface::FUNCTION_NAME) {
+        if (!$node instanceof FuncCall
+            || !$node->name instanceof Node\Scalar\String_
+            || (string) $node->name !== CollectorInterface::FUNCTION_NAME
+        ) {
             return null;
         }
 
