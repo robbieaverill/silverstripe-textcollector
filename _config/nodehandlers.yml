@@ -5,3 +5,4 @@ SilverStripe\TextCollector\Visitor\TextCollectorVisitor:
   handlers:
     - SilverStripe\TextCollector\NodeHandler\StringHandler
     - SilverStripe\TextCollector\NodeHandler\ClassShortNameHandler
+    - SilverStripe\TextCollector\NodeHandler\MagicClassConstantHandler

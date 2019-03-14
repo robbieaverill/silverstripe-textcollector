@@ -4,14 +4,15 @@ namespace SilverStripe\TextCollector\NodeHandler;
 
 use PhpParser\NameContext;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\MagicConst;
+use PhpParser\Node\Scalar\String_;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
 /**
- * Handles keys like `SomeClass::class . '.MY_TRANSLATION'`
+ * Handles keys with magic class constant: `__CLASS__ . '.MY_TRANSLATION'`
  */
-class ClassShortNameHandler implements NodeHandlerInterface
+class MagicClassConstantHandler  implements NodeHandlerInterface
 {
     /**
      * @var TextRepository
@@ -35,22 +36,13 @@ class ClassShortNameHandler implements NodeHandlerInterface
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
         return $keyNode instanceof Expr\BinaryOp\Concat
-            && $keyNode->left instanceof Expr\ClassConstFetch;
+            && $keyNode->left instanceof MagicConst\Class_;
     }
 
     public function handle(Expr $keyNode, Expr $valueNode, array $context)
     {
         /** @var Expr\BinaryOp\Concat $keyNode */
-        /** @var Expr\ClassConstFetch $left */
-        /** @var Scalar\String_ $valueNode */
-        $left = $keyNode->left;
-        if ($left->class->parts === ['self']) {
-            // Handle self::class constants
-            $className = $context['currentClass'];
-        } else {
-            // Handle SomeClass::class constants
-            $className = implode('\\', $this->nameContext->getResolvedClassName($left->class)->parts);
-        }
-        $this->repository->add($className . $keyNode->right->value, $valueNode->value);
+        /** @var String_ $valueNode */
+        $this->repository->add($context['currentClass'] . $keyNode->right->value, $valueNode->value);
     }
 }

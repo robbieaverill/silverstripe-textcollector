@@ -9,7 +9,7 @@ class BasicClass extends DataObject
 {
     public function getClassConstant()
     {
-        return _t(__CLASS__ . '.TITLE', '__CLASS__ title');
+        return _t(__CLASS__ . '.CLASS_TITLE', '__CLASS__ title');
     }
 
     public function getExplicitFQCN()
@@ -24,6 +24,6 @@ class BasicClass extends DataObject
 
     public function getSelfConstant()
     {
-        return _t(self::class . '.TITLE', 'self::class title');
+        return _t(self::class . '.SELF_TITLE', 'self::class title');
     }
 }

@@ -20,10 +20,23 @@ class CodeCollectorTest extends SapphireTest
             'Explicit FQCN title',
             $result['SilverStripe\\TextCollector\\Tests\\BasicClass.TITLE']
         );
+
         $this->assertArrayHasKey(SiteTree::class . '.TITLE', $result);
         $this->assertSame(
             'SiteTree::class title',
             $result[SiteTree::class . '.TITLE']
+        );
+
+        $this->assertArrayHasKey('SilverStripe\\TextCollector\\Tests\\BasicClass.CLASS_TITLE', $result);
+        $this->assertSame(
+            '__CLASS__ title',
+            $result['SilverStripe\\TextCollector\\Tests\\BasicClass.CLASS_TITLE']
+        );
+
+        $this->assertArrayHasKey('SilverStripe\\TextCollector\\Tests\\BasicClass.SELF_TITLE', $result);
+        $this->assertSame(
+            'self::class title',
+            $result['SilverStripe\\TextCollector\\Tests\\BasicClass.SELF_TITLE']
         );
     }
 }

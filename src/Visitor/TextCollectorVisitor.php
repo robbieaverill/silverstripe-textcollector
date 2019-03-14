@@ -29,6 +29,11 @@ class TextCollectorVisitor extends NodeVisitorAbstract
      */
     protected $handlers;
 
+    /**
+     * @var array
+     */
+    protected $context = [];
+
     public function __construct(TextRepository $repository, NameContext $nameContext)
     {
         $this->repository = $repository;
@@ -37,18 +42,23 @@ class TextCollectorVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
+        // Track the current class and namespace for use in self class references
+        if ($node instanceof Node\Stmt\Class_) {
+            $this->context['currentClass'] = implode('\\', $node->namespacedName->parts);
+        }
+
         // Find _t() function calls
-        if ($node instanceof FuncCall
-            && (string) $node->name === CollectorInterface::FUNCTION_NAME
-        ) {
-            // Note: expected _t() argument structure
-            list($keyNode, $valueNode) = $node->args;
-            foreach ($this->getHandlers() as $handler) {
-                if (!$handler->canHandle($keyNode->value, $valueNode->value)) {
-                    continue;
-                }
-                return $handler->handle($keyNode->value, $valueNode->value);
+        if (!$node instanceof FuncCall || (string) $node->name !== CollectorInterface::FUNCTION_NAME) {
+            return null;
+        }
+
+        // Note: expected _t() argument structure
+        list($keyNode, $valueNode) = $node->args;
+        foreach ($this->getHandlers() as $handler) {
+            if (!$handler->canHandle($keyNode->value, $valueNode->value)) {
+                continue;
             }
+            return $handler->handle($keyNode->value, $valueNode->value, $this->context);
         }
     }
 
