@@ -29,4 +29,9 @@ class ConcatenationInEntityValues extends DataObject
             . 'Line 6'
         );
     }
+
+    public function getConcatenatingIntegers()
+    {
+        return _t('Test.INTCONCAT', 'I would like ' . 3 . ' lunches please');
+    }
 }
