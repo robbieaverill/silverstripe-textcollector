@@ -62,6 +62,7 @@ class TextCollectorVisitor extends NodeVisitorAbstract
             break;
         }
 
+        // Example call signature: _t('Foo.BAR', 'Bar', 'Comment here')
         if (isset($node->args[2])) {
             $this->augmentWithComments($keyNode->value, $node->args[2]->value);
         }
@@ -89,7 +90,7 @@ class TextCollectorVisitor extends NodeVisitorAbstract
 
     /**
      * If there's a third argument and it's a string, we treat it as a comment. We can augment the existing collected
-     * text with the comment by replacing it, rather than expecting all Handlers to handler both scenarios
+     * text with the comment by replacing it, rather than expecting all Handlers to handle both scenarios
      *
      * @param Node\Expr $keyNode
      * @param Node\Expr $extra
