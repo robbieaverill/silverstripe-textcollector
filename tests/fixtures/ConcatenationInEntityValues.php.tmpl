@@ -27,8 +27,15 @@ class ConcatenationInEntityValues
         );
     }
 
-    public function getConcatenatingIntegers()
+    public function getTranslations()
     {
-        return _t('Test.INTCONCAT', 'I would like ' . 3 . ' lunches please');
+        return [
+            // Integers concatenated into the string
+            _t('Test.INTCONCAT', 'I would like ' . 3 . ' lunches please'),
+            // Concatenated strings in the key
+            _t('Test' . '.' . 'CONCAT_KEY', 'Concatenated key strings'),
+            // Use PHP_EOL in value
+            _t('Test.PHP_EOL', 'Hello' . PHP_EOL . 'World'),
+        ];
     }
 }

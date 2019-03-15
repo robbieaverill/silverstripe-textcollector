@@ -46,6 +46,8 @@ class CodeCollectorTest extends SapphireTest
         $this->assertSame('Line 1 and Line \'2\' and Line "3"', $result['Test.CONCATENATED']);
         $this->assertSame('Line 1 Line 2 Line 3 Line 4 Line 5 Line 6', $result['Test.MOARCONCATENATED']);
         $this->assertSame('I would like 3 lunches please', $result['Test.INTCONCAT']);
+        $this->assertSame('Concatenated key strings', $result['Test.CONCAT_KEY']);
+        $this->assertSame('Hello' . PHP_EOL . 'World', $result['Test.PHP_EOL']);
     }
 
     public function testEntityWithComment()

@@ -3,6 +3,7 @@
 namespace SilverStripe\TextCollector\NodeHandler;
 
 use PhpParser\Node\Expr;
+use SilverStripe\TextCollector\Exception\UncollectableNodeException;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
@@ -30,8 +31,15 @@ class VariableHandler implements NodeHandlerInterface
             || $valueNode instanceof Expr\Variable;
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UncollectableNodeException
+     */
     public function handle(Expr $keyNode, Expr $valueNode, array $context): void
     {
-        // noop
+        $node = $keyNode instanceof Expr\Variable ? $keyNode : $valueNode;
+        $exception = new UncollectableNodeException('Incompatible node type: ' . Expr\Variable::class);
+        $exception->setNode($node);
+        throw $exception;
     }
 }

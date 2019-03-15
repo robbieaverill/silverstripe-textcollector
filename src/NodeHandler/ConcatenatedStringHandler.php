@@ -80,7 +80,11 @@ class ConcatenatedStringHandler implements NodeHandlerInterface
             return implode('\\', $this->nameContext->getResolvedClassName($node->class)->parts);
         }
 
-        $exception = new UncollectableNodeException();
+        if ($node instanceof Expr\ConstFetch && (string) $node->name === 'PHP_EOL') {
+            return PHP_EOL;
+        }
+
+        $exception = new UncollectableNodeException('Incompatible node type: ' . get_class($node));
         $exception->setNode($node);
         throw $exception;
     }
