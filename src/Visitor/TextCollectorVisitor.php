@@ -55,7 +55,7 @@ class TextCollectorVisitor extends NodeVisitorAbstract
 
         // Find _t() function calls
         if (!$node instanceof FuncCall
-            || !$node->name instanceof Node\Scalar\String_
+            || !$node->name instanceof Node\Name
             || (string) $node->name !== CollectorInterface::FUNCTION_NAME
         ) {
             return null;
@@ -144,8 +144,14 @@ class TextCollectorVisitor extends NodeVisitorAbstract
      */
     protected function handlePlurals(): void
     {
-        foreach ($this->repository->getAll() as $key => $value) {
-            $checkValue = is_string($value) ? $value : $value['default'];
+        $textEntities = $this->repository->getAll();
+        foreach ($textEntities as $key => $value) {
+            if (is_array($value) && !isset($value['default'])) {
+                // We can't split this up
+                continue;
+            }
+
+            $checkValue = is_string($value) ? $value : (string) $value['default'];
             // Look for a pipe delimiter, indicating pluralisation
             if (strpos($checkValue, '|') === false) {
                 continue;

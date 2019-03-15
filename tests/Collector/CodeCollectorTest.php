@@ -17,6 +17,7 @@ class CodeCollectorTest extends SapphireTest
         $this->assertSame('SiteTree::class title', $result[SiteTree::class . '.TITLE']);
         $this->assertSame('__CLASS__ title', $result['SilverStripe\\TextCollector\\Tests\\BasicClass.CLASS_TITLE']);
         $this->assertSame('self::class title', $result['SilverStripe\\TextCollector\\Tests\\BasicClass.SELF_TITLE']);
+        $this->assertSame('Empty', $result['SilverStripe\\TextCollector\\Tests\\BasicClass.EMPTY']);
     }
 
     public function testNestedFormFieldCollection()
@@ -70,6 +71,15 @@ class CodeCollectorTest extends SapphireTest
             'other' => '{count} items',
             'comment' => 'Test Pluralisation',
         ], $result['i18nTestModule.INJECTIONS9']);
+    }
+
+    public function testTranslationInsideDBField()
+    {
+        $result = $this->collectFromFixture('TranslationInsideDBField');
+        $this->assertSame([
+            'You must log in with your CMS password in order to view the draft or archived content. '
+            . '<a href="{link}">Click here to go back to the published site.</a>',
+        ], $result['SilverStripe\\TextCollector\\Tests\\TranslationInsideDBField.DRAFT_SITE_ACCESS_RESTRICTION']);
     }
 
     /**

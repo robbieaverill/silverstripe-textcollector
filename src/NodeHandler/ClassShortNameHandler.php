@@ -35,7 +35,8 @@ class ClassShortNameHandler implements NodeHandlerInterface
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
         return $keyNode instanceof Expr\BinaryOp\Concat
-            && $keyNode->left instanceof Expr\ClassConstFetch;
+            && $keyNode->left instanceof Expr\ClassConstFetch
+            && $valueNode instanceof Scalar\String_;
     }
 
     public function handle(Expr $keyNode, Expr $valueNode, array $context)
@@ -44,13 +45,14 @@ class ClassShortNameHandler implements NodeHandlerInterface
         /** @var Expr\ClassConstFetch $left */
         /** @var Scalar\String_ $valueNode */
         $left = $keyNode->left;
-        if ($left->class->parts === ['self']) {
-            // Handle self::class constants
+        if (in_array($left->class->parts, [['self'], ['static']])) {
+            // Handle self::class constants (and treat static::class as self::class, because it's not collectable)
             $className = $context['currentClass'];
         } else {
             // Handle SomeClass::class constants
             $className = implode('\\', $this->nameContext->getResolvedClassName($left->class)->parts);
         }
+
         $this->repository->addString($className . $keyNode->right->value, $valueNode->value);
     }
 }
