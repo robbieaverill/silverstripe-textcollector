@@ -95,6 +95,17 @@ class CodeCollectorTest extends SapphireTest
     }
 
     /**
+     * This is a test for when the user has forgotten the default value, but provided an injection array instead
+     *
+     * @expectedException \SilverStripe\TextCollector\Exception\MissingDefaultValueException
+     * @expectedExceptionMessage Test.NO_VALUE2 missing default translation value
+     */
+    public function testTranslationsWithWrongValueArgument()
+    {
+        $this->collectFromFixture('WrongValueArgument');
+    }
+
+    /**
      * Loads a fixtured PHP template file from the fixtures folder and returns the collected contents of it
      *
      * @param string $fixture

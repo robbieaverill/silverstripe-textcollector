@@ -2,13 +2,10 @@
 
 namespace SilverStripe\TextCollector\Tests;
 
-class php
+class MissingValues
 {
-    public function getTranslations()
+    public function getTranslation()
     {
-        return [
-            _t('Test.NO_VALUE'),
-            _t('Test.NO_VALUE2', ['name' => 'Cat', 'greeting' => 'meow', 'goodbye' => 'meow']),
-        ];
+        return _t('Test.NO_VALUE');
     }
 }

@@ -62,7 +62,7 @@ class TextCollectorVisitor extends NodeVisitorAbstract
         }
 
         // Note: expected _t() argument structure
-        if (count($node->args) === 1) {
+        if (count($node->args) < 2 || $node->args[1]->value instanceof Node\Expr\Array_) {
             throw new MissingDefaultValueException(
                 $node->args[0]->value->value . ' missing default translation value.'
             );
@@ -157,7 +157,7 @@ class TextCollectorVisitor extends NodeVisitorAbstract
                 continue;
             }
 
-            list($single, $plural) = explode('|', $checkValue);
+            list($single, $plural) = explode('|', $checkValue, 2);
             $originalArray = is_array($value) ? $value : [];
             unset($originalArray['default']);
 

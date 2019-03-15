@@ -27,8 +27,7 @@ class VariableHandler implements NodeHandlerInterface
 
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
-        return $keyNode instanceof Expr\Variable
-            || $valueNode instanceof Expr\Variable;
+        return $keyNode instanceof Expr\Variable || $valueNode instanceof Expr\Variable;
     }
 
     /**
