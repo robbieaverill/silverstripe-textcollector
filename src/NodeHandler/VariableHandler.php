@@ -38,7 +38,7 @@ class VariableHandler implements NodeHandlerInterface
     public function handle(Expr $keyNode, Expr $valueNode, array $context): void
     {
         $node = $keyNode instanceof Expr\Variable ? $keyNode : $valueNode;
-        $exception = new UncollectableNodeException('Incompatible node type: ' . Expr\Variable::class);
+        $exception = new UncollectableNodeException('Incompatible node type: ' . $node->getType());
         $exception->setNode($node);
         throw $exception;
     }

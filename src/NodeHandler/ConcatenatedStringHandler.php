@@ -84,7 +84,7 @@ class ConcatenatedStringHandler implements NodeHandlerInterface
             return PHP_EOL;
         }
 
-        $exception = new UncollectableNodeException('Incompatible node type: ' . get_class($node));
+        $exception = new UncollectableNodeException('Incompatible node type: ' . $node->getType());
         $exception->setNode($node);
         throw $exception;
     }
