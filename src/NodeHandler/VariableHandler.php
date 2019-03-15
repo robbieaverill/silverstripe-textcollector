@@ -3,7 +3,6 @@
 namespace SilverStripe\TextCollector\NodeHandler;
 
 use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar\String_;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
 
@@ -27,10 +26,11 @@ class VariableHandler implements NodeHandlerInterface
 
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
-        return $keyNode instanceof String_ && $valueNode instanceof Expr\Variable;
+        return $keyNode instanceof Expr\Variable
+            || $valueNode instanceof Expr\Variable;
     }
 
-    public function handle(Expr $keyNode, Expr $valueNode, array $context)
+    public function handle(Expr $keyNode, Expr $valueNode, array $context): void
     {
         // noop
     }

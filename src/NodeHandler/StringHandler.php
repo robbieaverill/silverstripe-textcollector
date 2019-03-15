@@ -30,7 +30,7 @@ class StringHandler implements NodeHandlerInterface
         return $keyNode instanceof String_ && $valueNode instanceof String_;
     }
 
-    public function handle(Expr $keyNode, Expr $valueNode, array $context)
+    public function handle(Expr $keyNode, Expr $valueNode, array $context): void
     {
         /** @var String_ $keyNode */
         /** @var String_ $valueNode */

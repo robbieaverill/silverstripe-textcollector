@@ -26,5 +26,5 @@ interface NodeHandlerInterface
      * @param Expr $keyNode
      * @param Expr $valueNode
      */
-    public function handle(Expr $keyNode, Expr $valueNode, array $context);
+    public function handle(Expr $keyNode, Expr $valueNode, array $context): void;
 }

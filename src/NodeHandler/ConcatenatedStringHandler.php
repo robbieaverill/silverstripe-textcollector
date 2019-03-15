@@ -2,11 +2,14 @@
 
 namespace SilverStripe\TextCollector\NodeHandler;
 
+use PhpParser\NameContext;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\MagicConst;
 use PhpParser\Node\Scalar\String_;
+use SilverStripe\TextCollector\Exception\UncollectableNodeException;
 use SilverStripe\TextCollector\NodeHandlerInterface;
 use SilverStripe\TextCollector\TextRepository;
-use function array_reverse;
 
 /**
  * Handles values like `'Foo' . ' bar ' . baz'`
@@ -19,46 +22,66 @@ class ConcatenatedStringHandler implements NodeHandlerInterface
     protected $repository;
 
     /**
+     * @var NameContext
+     */
+    protected $nameContext;
+
+    /**
      * @param TextRepository $repository
      */
-    public function __construct(TextRepository $repository)
+    public function __construct(TextRepository $repository, NameContext $nameContext)
     {
         $this->repository = $repository;
+        $this->nameContext = $nameContext;
     }
 
     public function canHandle(Expr $keyNode, Expr $valueNode): bool
     {
-        return $keyNode instanceof String_
-            && $valueNode instanceof Expr\BinaryOp\Concat;
+        return $keyNode instanceof Expr\BinaryOp\Concat
+            || $valueNode instanceof Expr\BinaryOp\Concat;
     }
 
-    public function handle(Expr $keyNode, Expr $valueNode, array $context)
+    public function handle(Expr $keyNode, Expr $valueNode, array $context): void
     {
-        /** @var String_ $keyNode */
-        /** @var Expr\BinaryOp\Concat $valueNode */
+        $this->repository->addString(
+            $this->flattenConcatenatedNodes($keyNode, $context),
+            $this->flattenConcatenatedNodes($valueNode, $context)
+        );
+    }
 
-        // Add the right side of the original node
-        $valueParts = [$valueNode->right->value];
-
-        // Handle recursive concatenation nodes
-        $currentNode = $valueNode->left;
-        while ($currentNode instanceof Expr\BinaryOp\Concat) {
-            if ($currentNode->left instanceof String_) {
-                // Push values in reverse
-                $valueParts[] = $currentNode->right->value;
-                $valueParts[] = $currentNode->left->value;
-                // Reached the bottom of the tree
-                break;
-            }
-            // Push the right leaf node anyway, it's always a string
-            $valueParts[] = $currentNode->right->value;
-            // Update current node pointer
-            $currentNode = $currentNode->left;
+    /**
+     * @param Expr $node
+     * @param array $context
+     * @return string
+     * @throws UncollectableNodeException
+     */
+    protected function flattenConcatenatedNodes(Expr $node, array $context): string
+    {
+        if ($node instanceof Expr\BinaryOp\Concat) {
+            $left = $this->flattenConcatenatedNodes($node->left, $context);
+            $right = $this->flattenConcatenatedNodes($node->right, $context);
+            return $left . $right;
         }
 
-        // Flip the array direction
-        $valueParts = array_reverse($valueParts);
+        if ($node instanceof String_ || $node instanceof LNumber) {
+            return (string) $node->value;
+        }
 
-        $this->repository->addString($keyNode->value, implode($valueParts));
+        if ($node instanceof MagicConst) {
+            return $context['currentClass'];
+        }
+
+        if ($node instanceof Expr\ClassConstFetch) {
+            if (in_array($node->class->parts, [['self'], ['static']])) {
+                // Handle self::class constants (and treat static::class as self::class, because it's not collectable)
+                return $context['currentClass'];
+            }
+            // Handle SomeClass::class constants
+            return implode('\\', $this->nameContext->getResolvedClassName($node->class)->parts);
+        }
+
+        $exception = new UncollectableNodeException();
+        $exception->setNode($node);
+        throw $exception;
     }
 }

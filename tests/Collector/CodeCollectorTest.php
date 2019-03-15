@@ -76,10 +76,11 @@ class CodeCollectorTest extends SapphireTest
     public function testTranslationInsideDBField()
     {
         $result = $this->collectFromFixture('TranslationInsideDBField');
-        $this->assertSame([
+        $this->assertSame(
             'You must log in with your CMS password in order to view the draft or archived content. '
             . '<a href="{link}">Click here to go back to the published site.</a>',
-        ], $result['SilverStripe\\TextCollector\\Tests\\TranslationInsideDBField.DRAFT_SITE_ACCESS_RESTRICTION']);
+            $result['SilverStripe\\TextCollector\\Tests\\TranslationInsideDBField.DRAFT_SITE_ACCESS_RESTRICTION']
+        );
     }
 
     /**
