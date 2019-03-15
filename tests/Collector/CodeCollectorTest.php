@@ -106,6 +106,22 @@ class CodeCollectorTest extends SapphireTest
     }
 
     /**
+     * @expectedException \SilverStripe\TextCollector\Exception\UncollectableNodeException
+     */
+    public function testExceptionThrownWhenUsingVariableAsKey()
+    {
+        $this->collectFromFixture('VariableAsKey');
+    }
+
+    /**
+     * @expectedException \SilverStripe\TextCollector\Exception\UncollectableNodeException
+     */
+    public function testExceptionThrownWhenUsingVariableAsValue()
+    {
+        $this->collectFromFixture('VariableAsValue');
+    }
+
+    /**
      * Loads a fixtured PHP template file from the fixtures folder and returns the collected contents of it
      *
      * @param string $fixture

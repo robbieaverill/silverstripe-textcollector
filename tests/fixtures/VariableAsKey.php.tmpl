@@ -1,0 +1,12 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+class VariableAsKey
+{
+    public function getTranslations()
+    {
+        $foo = 'Test.WILL_NOT_WORK';
+        return _t($foo, 'I am not collectable');
+    }
+}

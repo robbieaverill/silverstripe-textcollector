@@ -1,0 +1,12 @@
+<?php
+
+namespace SilverStripe\TextCollector\Tests;
+
+class VariableAsKey
+{
+    public function getTranslations()
+    {
+        $foo = 'Hello World';
+        return _t('Test.KEY', $foo);
+    }
+}
